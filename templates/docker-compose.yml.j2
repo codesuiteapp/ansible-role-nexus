@@ -1,0 +1,22 @@
+version: "3"
+services:
+  nexus:
+    image: ${DOCKER_IMAGE}
+    container_name: nexus
+    environment:
+      - NEXUS_CONTEXT=nexus
+      - TZ=Asia/Seoul
+      - INSTALL4J_ADD_VM_PARAMS=-Xms2048m -Xmx2048m -XX:MaxDirectMemorySize=2048m -Djava.util.prefs.userRoot={{ nexus_data }}
+    volumes:
+      - {{ nexus_data }}:/nexus-data
+    ports:
+      - "{{ nexus_port }}:8081"
+    restart: unless-stopped
+{% if use_dkr_net %}
+    networks:
+      - {{ dkr_network }}
+
+networks:
+  {{ dkr_network }}:
+    external: true
+{% endif %}

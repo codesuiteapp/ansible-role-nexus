@@ -1,0 +1,3 @@
+---
+nexus_home: "{{ app_home_dir }}/nexus-docker"
+nexus_data: "{{ app_data_dir }}/nexus"

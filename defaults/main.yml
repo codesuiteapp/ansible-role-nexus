@@ -1,0 +1,26 @@
+---
+image_registry_server: "ghcr.io/codesuiteapp"
+nexus_image: "sonatype/nexus3"
+nexus_ver: "latest"
+docker_compose_bin: "docker-compose"
+docker_type: ghcr.io
+
+app_home_dir: /app/docker
+app_data_dir: /appdata
+nexus_data: "{{ app_data_dir }}/m2/repository"
+
+create_user: false
+adm_user: "appadm"
+adm_group: "appadm"
+adm_uid: "1000"
+nexus_user: "200"
+
+use_dkr_net: false
+dkr_network: devops_net
+use_extra_hosts: false
+add_etc_host: "10.11.22.10   devops.com"
+nexus_port: 8081
+
+# passwd_adm_user: "__your_passwd_"
+# dkr_username: "__your_user__"
+# dkr_passwd: "__your_token__"
