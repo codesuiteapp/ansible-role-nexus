@@ -1,7 +1,4 @@
 ---
-- name: Create User
-  include_tasks: "user.yml"
-
 - name: Creates directory
   ansible.builtin.file:
     path: "{{ item }}"
@@ -24,7 +21,7 @@
   with_items:
     - "{{ nexus_data }}"
 
-- name: Copy file from template
+- name: Copy file
   ansible.builtin.template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
@@ -33,7 +30,7 @@
     mode: '0644'
     backup: true
   with_items:
-    - { src: 'docker-compose.yml.j2', dest: '{{ nexus_home }}/docker-compose.yml' }
     - { src: '.env.j2', dest: '{{ nexus_home }}/.env' }
+    - { src: 'docker-compose.yml.j2', dest: '{{ nexus_home }}/docker-compose.yml' }
   notify:
     Restart nexus
