@@ -7,6 +7,13 @@ services:
       - NEXUS_CONTEXT=nexus
       - TZ=Asia/Seoul
       - INSTALL4J_ADD_VM_PARAMS=-Xms2048m -Xmx2048m -XX:MaxDirectMemorySize=2048m -Djava.util.prefs.userRoot={{ nexus_data }}
+{% if use_traefik %}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nexus.rule=Host(`${TRF_DOMAIN}`) && PathPrefix(`/nexus`)"
+      - "traefik.http.routers.nexus.entrypoints=websecure"
+      - "traefik.http.routers.nexus.tls=true"
+{% endif %}
     volumes:
       - {{ nexus_data }}:/nexus-data
     ports:
