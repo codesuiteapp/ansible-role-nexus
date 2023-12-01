@@ -19,6 +19,12 @@ services:
     ports:
       - "{{ nexus_port }}:8081"
     restart: unless-stopped
+{% if use_extra_hosts %}
+    extra_hosts:
+    {% for host in extra_hosts %}
+    - {{ host }}
+    {% endfor %}
+{% endif %}
 {% if use_dkr_net %}
     networks:
       - {{ dkr_network }}
