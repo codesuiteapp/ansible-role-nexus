@@ -10,14 +10,16 @@ services:
 {% if use_traefik %}
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.nexus.rule=Host(`${TRF_DOMAIN}`) && PathPrefix(`/nexus`)"
-      - "traefik.http.routers.nexus.entrypoints=websecure"
+      - "traefik.http.routers.nexus.entrypoints=web,websecure"
+      - "traefik.http.routers.nexus.rule=Host(`${trf_domain}`) && PathPrefix(`/nexus`)"
+    {% if use_traefik_tls %}
       - "traefik.http.routers.nexus.tls=true"
+    {% endif %}
 {% endif %}
-    volumes:
-      - {{ nexus_data }}:/nexus-data
     ports:
       - "{{ nexus_port }}:8081"
+    volumes:
+      - {{ nexus_data }}:/nexus-data
     restart: unless-stopped
 {% if use_extra_hosts %}
     extra_hosts:
