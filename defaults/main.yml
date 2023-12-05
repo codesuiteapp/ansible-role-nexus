@@ -5,7 +5,6 @@ nexus_ver: "latest"
 nexus_port: 8081
 nexus_user: "200"
 
-docker_type: ghcr.io
 docker_compose_bin: "docker-compose"
 use_dkr_net: false
 dkr_network: devops_net
@@ -20,4 +19,3 @@ create_user: false
 adm_user: "appadm"
 adm_group: "appadm"
 adm_uid: "1000"
-
