@@ -1,4 +1,13 @@
 ---
+- name: Install softwares with package manager
+  become: true
+  ansible.builtin.package:
+    name:
+      - docker-compose
+      - python3-pip
+  when: ansible_pkg_mgr != "pacman"
+  ignore_errors: true
+
 - name: Create docker network
   community.docker.docker_network:
     name: "{{ dkr_network }}"
