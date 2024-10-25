@@ -1,27 +1,17 @@
 ---
-- name: Creates directory
+- name: Create directories
   ansible.builtin.file:
-    path: "{{ item }}"
+    path: "{{ item.path }}"
     state: directory
-    owner: "{{ adm_user }}"
-    group: "{{ adm_group }}"
-    mode: '0775'
-    force: false
-  with_items:
-    - "{{ app_home_dir }}"
-    - "{{ nexus_home }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+  loop:
+    - { path: "{{ app_home_dir }}", owner: "{{ adm_user }}", group: "{{ adm_group }}", mode: '0775' }
+    - { path: "{{ nexus_home }}", owner: "{{ adm_user }}", group: "{{ adm_group }}", mode: '0775' }
+    - { path: "{{ nexus_data }}", owner: "{{ nexus_user }}", group: "{{ nexus_user }}", mode: '0775' }
 
-- name: Creates directory
-  ansible.builtin.file:
-    path: "{{ item }}"
-    state: directory
-    owner: "{{ nexus_user }}"
-    group: "{{ nexus_user }}"
-    mode: '0775'
-  with_items:
-    - "{{ nexus_data }}"
-
-- name: Copy file
+- name: Copy files
   ansible.builtin.template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
@@ -29,11 +19,11 @@
     group: "{{ adm_group }}"
     mode: '0644'
     backup: true
-  with_items:
+  loop:
     - { src: '.env.j2', dest: '{{ nexus_home }}/.env' }
     - { src: 'docker-compose.yml.j2', dest: '{{ nexus_home }}/docker-compose.yml' }
 
 - name: Restart nexus
-  ansible.builtin.shell: echo success
-  notify:
-    Restart nexus
+  ansible.builtin.command: echo success
+  changed_when: false
+  notify: Restart nexus
